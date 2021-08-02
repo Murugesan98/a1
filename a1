@@ -1,0 +1,117 @@
+customer_name = ""
+customer_details = {"Murugesan": [{"membership":'Y', "other_details":[{"price": 100,"number_of_tickets": 10,"destination":"Chennai"},{"price": 100,"number_of_tickets": 1,"destination":"Chennai"}]}], "Gopinath": [{"membership":'Y', "other_details":[{"price": 100,"number_of_tickets": 10,"destination":"Madurai"}]}]}
+destination_price = {"Chennai":100, "Madurai": 200, "Mumbai": 300}
+destination_available = ["Chennai" "Madurai", "Mumbai"]
+def get_membership_details(inputs):
+   membership = input(inputs)
+   if(membership == 'Y' or membership == 'N'):
+    return membership
+   else:
+    return get_membership_details("Please enter Y or N: ")
+
+def get_ticketcount_details(inputs):
+   ticket_count = int(input(inputs))
+   if(ticket_count > 0 ):
+    return ticket_count
+   else:
+    return get_ticketcount_details("Please enter a value above 0 ")
+
+def get_destination_details(inputs):
+    destination = input(inputs)
+    if(destination not in destination_available):
+        return get_destination_details("Enter the valid destination in the list " + str(destination_available) + " ")
+    else:
+        return destination
+def book_ticket():
+ ticket_price = 100
+ ticket_cost = 0
+ discount = 5
+ customer_name = input("Enter your name: ")
+ destination = get_destination_details("Enter the destination: ")
+ ticket_count = get_ticketcount_details("Enter the number of Tickets you need to book for ")
+
+ if(customer_name in customer_details and customer_details[customer_name][0]["membership"] == 'Y'):
+     membership = 'Y'
+ else:
+     membership = get_membership_details("Do you want membership: ")
+     print(membership)
+     if(membership == 'Y'):
+       ticket_cost = (ticket_price * ticket_count) - (ticket_price * ticket_count) * (discount/100)
+     else:
+       discount = 0
+       ticket_cost = ticket_price * ticket_count 
+ for customer in customer_details:
+    if(customer == customer_name):
+      customer_details[customer_name][0]["other_details"].append([{"number_of_tickets": ticket_count,"destination":destination, "price": ticket_cost}])
+ print(customer_name + " books " + str(ticket_count) + " tickets to " + destination)
+ print(customer_name + " gets a discount of " + str(discount) + "%")
+ print("Unit price: " + str(ticket_price))
+ print("Total price: " + str(ticket_cost))
+ customer_details[customer_name]  = [{"number_of_tickets": ticket_count,"destination":destination, "membership":membership, "price": ticket_cost}]
+ print(customer_details)
+ ticket_booking_system()
+
+def display_customers():
+    print(customer_details.keys())
+    ticket_booking_system()
+
+def display_valid_destination():
+    print(str(destination_available))
+    ticket_booking_system()
+
+def add_destination():
+  new_destination = input("Enter the new destination: ")
+  price = int(input("Enter the price: "))
+  if new_destination not in destination_available:
+      destination_available.append(new_destination)
+      destination_price[new_destination] = price
+      print(destination_price.items())
+      ticket_booking_system()
+
+def display_customers_with_membership():
+   customers_with_membership=[]
+   for customer in customer_details:
+     if(customer_details[customer][0]["membership"] == 'Y'):
+         customers_with_membership.append(customer)
+   print(customers_with_membership)
+
+def order_history():
+  print("Order history") 
+  orderhistory = {}
+  for x in customer_details:
+      for y in range (0,len(customer_details[x][0]["other_details"])):
+         orderhistory[customer_details[x][0]["other_details"][y]["destination"]] = customer_details[x][0]["other_details"][y]["number_of_tickets"]
+  print(orderhistory)
+
+def ticket_booking_system():
+    print("1: Book a new trip")
+    print("2: Add a new destination")
+    print("3: Display all existing customer")
+    print("4: Display all customers with membership")
+    print("5: Display all valid destination")
+    print("6: Most valuable customer")
+    print("7: customer order history")
+    print("8: Exit the program")
+    user_option = int(input())
+    if(user_option == 1):
+     book_ticket()
+    elif(user_option == 2):
+     add_destination()
+    elif(user_option == 3):
+     display_customers()
+    elif(user_option == 4):
+     display_customers_with_membership()
+    elif(user_option == 5):
+     display_valid_destination()
+    elif(user_option == 7):
+     order_history()
+    elif(user_option == 8):
+     exit()
+    else:
+      print("enter a valid number ")
+      ticket_booking_system()
+ 
+ 
+
+ticket_booking_system()
+#order_history()
